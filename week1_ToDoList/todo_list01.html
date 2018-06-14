@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ToDo List</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+    <!-- <script src="bootstrap-4.1.1/dist/js/bootstrap.min.js"></script> -->
+</head>
+<style>
+  *{
+    margin:0;
+    padding:0;
+    font-family:'Roboto', sans-serif;
+  }
+  body{
+    background: #E1E1E1;
+  }
+
+  .wrapper{
+    /* width: 1070px; */
+  }
+  header.navBar{
+    margin:0 auto;
+    width: 100%;
+    /* max-width: 1200px; */
+    height: 76px;
+  }
+  .navBar>ul>li{
+    list-style: none;
+    line-height: 76px;
+    height: 100%;
+    width:220px;
+  }
+  .navBar>ul>li>a{ 
+    color:#00408B;
+    font-size:24px;
+    width: 160px;
+    height:76px;
+    display: block;
+    cursor: pointer;
+    margin:0 auto;
+  }
+  .navBar>ul>li>a:hover{
+    color:#fff !important;
+    transition:.5s;
+  }
+  a.active{
+    border-bottom: 5px solid #00408B;
+    color:#fff !important;
+    transition:.5s;
+  }
+
+  /*input樣式*/
+  input[type="checkbox"] { display: none; }
+
+  input[type="checkbox"] + label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    /* margin-bottom: 20px; */
+    /* margin-left:20px; */
+    font: 14px/20px 'Open Sans', Arial, sans-serif;
+    color: #ddd;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  input[type="checkbox"] + label:last-child { margin-bottom: 0; }
+
+  input[type="checkbox"] + label:before {
+    content: '';
+    display: block;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #4A90E2;
+    position: absolute;
+    left: 0;
+    top: 6px;
+    opacity: .6;
+    -webkit-transition: all .12s, border-color .08s;
+    transition: all .12s, border-color .08s;
+  }
+
+  input[type="checkbox"]:checked + label:before {
+    width: 10px;
+    top: 2px;
+    left: 11px;
+    border-radius: 0;
+    opacity: 1;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  
+  /*input樣式結束*/
+  .addTodo{
+    width:620px;
+    height: 65px;
+    line-height: 46px;
+    margin:0 auto;
+    display: block;
+    font-size: 24px;
+    color: #C8C8C8;
+    text-align: left;
+    border: 2px solid #C8C8C8;
+    background: #fff;
+    border-radius: 5px;
+    padding:10px 35px;
+    cursor: pointer;
+  }
+  .addTodo>i{
+    font-size: 20px;
+  }
+
+
+  .listGroup{
+    width: 620px;
+    margin: 0 auto;
+  }
+  .todoitem{
+    background: #F2F2F2;
+    box-shadow: 0 4px 4px 0 #C8C8C8;
+    border-radius: 5px;
+    /* height: 519px; */
+    overflow: hidden;
+  }
+  .card-header{
+    min-height: 76px;
+    /* background: #F2F2F2; */
+    border-radius: 5px 5px 0 0;
+  }
+  .title>p{
+    font-size: 24px;
+    color: #000000;
+    font-weight: 600;
+  }
+  .icon>a{
+    display: block;
+  }
+  i.text-black{
+    color:#000;
+    font-size: 24px;
+  }
+  i.yellow{
+    color:#F5A623;
+    font-size: 24px;
+    /* background: #F5A623; */
+  }
+  i.primary{
+    color:#4A90E2;;
+    font-size: 24px;
+  }
+  i.gray{
+    color: #C8C8C8;
+    font-size:24px;
+    line-height: 28px;
+  }
+  .card-body{
+    border-top:3px solid #C8C8C8;
+    padding:30px 70px;
+  }
+  .btnUpload{
+    background: #C8C8C8;
+    border-radius: 2px;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    margin-left:30px;
+  }
+  input.date ,input.time{
+    border: none;
+    border-radius: 2px;
+    width: 162px;
+    height: 35px;
+    padding:.25rem .5rem;
+    color: #C8C8C8;
+    font-size:16px;
+  }
+
+  .card-footer{
+    height: 60px;
+  }
+  .cancelBtn{
+    flex:1;
+    font-size: 24px;
+    line-height: 60px;
+    background: #fff;
+  }
+  .addBtn{
+    flex:1; 
+    font-size: 24px;
+    line-height: 60px;
+  }
+
+  /*--收起--*/
+  .bottomIcon{
+    color:#757575;
+    margin:-10px 0 12px 70px;
+    font-size:18px;
+  }
+
+  .totalUndone{
+    font-family: Roboto-Italic;
+    font-size: 24px;
+    color: #C8C8C8;
+    margin:10px auto 60px auto;
+    width: 620px;
+  }
+  /*----*/
+  .completed {
+    color: #9B9B9B!important ;
+    text-decoration: line-through;
+  }
+</style>
+<body>
+
+  <div id="wrapper" class="wrapper">
+
+    <!-- header -->
+    <header class="navBar bg-primary d-flex align-items-center justify-content-center">
+      <ul class="d-flex m-0 p-0">
+        <li @click="visibility = 'all'">
+          <a class="text-center" :class="{active : visibility==='all'}">My Tasks</a>
+        </li>
+        <li @click="visibility = 'progress'">
+          <a class="abc text-center":class="{active : visibility==='progress'}">In Progress</a>
+        </li>
+        <li @click="visibility = 'completed'">
+          <a class="text-center" :class="{active : visibility==='completed'}">Completed</a>
+        </li>
+      </ul> 
+    </header>
+    <!-- header -->
+
+    <div class="addTodo mt-3">
+      <i class="fas fa-plus">&nbsp;&nbsp;&nbsp;&nbsp;</i>Add  Tsak
+    </div>
+
+    <div class="listGroup p-0 my-2">
+      
+      <div class="todoitem card mb-2" v-for="(item, key) in todos">
+        <!-- card-header start -->
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="title d-flex ml-2">
+            <input type="checkbox" :id="item.id" v-model="item.completed">
+            <label :for="item.id"></label>
+            <p class="mb-0 ml-2" :class="{completed : item.completed}">{{ item.title }}</p>
+          </div>
+          <div class="icon d-flex align-items-center">
+            <a href=""><i @click.prevent="" class="far fa-star text-black pr-3"></i></a>
+            <a href=""><i class="fas fa-edit primary pr-3"></i></a>
+            <a href="" @click.prevent="removeTodo"><i class="fas fa-times gray"></i></a>
+          </div>
+        </div>
+        <!-- card-header end -->
+        <!-- card-body start-->
+        <div class="card-body text-black">
+
+          <div class="deadline mb-4">
+            <h5 class="card-title font-weight-bold"><i class="far fa-calendar-alt mr-3"></i>Deadline</h5>
+            <el-date-picker v-model="item.date" type="date" placeholder="选择日期"></el-date-picker>
+          </div>
+          
+          <div class="upload mb-4">
+            <h5 class="card-title font-weight-bold"><i class="far fa-file mr-3"></i>File</h5>
+            <label class="btnUpload btn p-0">
+              <i class="fas fa-plus text-white"></i>
+              <input id="" style="display:none;" type="file">
+            </label>
+          </div>
+          
+          <div class="comment">
+            <h5 class="card-title font-weight-bold"><i class="far fa-comment-dots mr-2"></i>Comment</h5>
+            <textarea placeholder="Type your memo here…" class="ml-4 py-2 px-3" name="" id="" cols="50" rows="5">{{ item.comment }}</textarea>
+          </div>
+        </div>
+        <!-- card-body end-->
+        <!-- card-footer start-->
+        <div class="card-footer d-flex p-0">
+          <a class="cancelBtn text-danger text-center"><i class="fas fa-times"></i>&nbsp; Cancel</a>
+          <a class="addBtn btn-primary text-white text-center" @click="addTodo"><i class="fas fa-plus"></i>&nbsp; Add Task</a>
+        </div>
+        <!-- card-footer end-->
+      </div>
+
+      <div class="todoitem card mb-2">
+        <!-- card-header start -->
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="title d-flex ml-2">
+            <input type="checkbox" id="box-2">
+            <label for="box-2"></label>
+            <p class="mb-0 ml-2">Type Something Here...</p>
+          </div>
+          <div class="icon d-flex align-items-center">
+            <a href=""><i class="far fa-star text-black pr-3"></i></a>
+            <a href=""><i class="fas fa-edit primary pr-3"></i></a>
+            <a href=""><i class="fas fa-times gray"></i></a>
+          </div>
+        </div>
+        <div class="bottomIcon">
+          <i class="far fa-calendar-alt mr-2"><span class="ml-1">5/25</span></i>
+          <i class="far fa-file mr-2"></i>
+          <i class="far fa-comment-dots mr-2"></i>
+        </div>
+        
+        <!-- card-header end -->
+      </div>
+
+      <div class="todoitem card mb-2 bg-warning">
+        <!-- card-header start -->
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="title d-flex ml-2">
+            <input type="checkbox" id="box-3">
+            <label for="box-3"></label>
+            <p class="mb-0 ml-2">Type Something Here...</p>
+          </div>
+          <div class="icon d-flex align-items-center">
+            <a href=""><i class="fas fa-star yellow pr-3"></i></a>
+            <a href=""><i class="fas fa-edit primary pr-3"></i></a>
+            <a href=""><i class="fas fa-times gray"></i></a>
+          </div>
+        </div>
+        <div class="bottomIcon">
+          <!-- <i class="far fa-calendar-alt mr-2"><span class="ml-1"></span></i> -->
+          <i class="far fa-file mr-2"></i>
+          <i class="far fa-comment-dots mr-2"></i>
+        </div>
+        
+        <!-- card-header end -->
+      </div>
+
+      <div class="todoitem card mb-2 bg-warning">
+        <!-- card-header start -->
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div class="title d-flex ml-2">
+            <input type="checkbox" id="box-4">
+            <label for="box-4"></label>
+            <p class="mb-0 ml-2">Type Something Here...</p>
+          </div>
+          <div class="icon d-flex align-items-center">
+            <a href=""><i class="fas fa-star yellow pr-3"></i></a>
+            <a href=""><i class="fas fa-edit primary pr-3"></i></a>
+            <a href=""><i class="fas fa-times gray"></i></a>
+          </div>
+        </div>
+        <div class="bottomIcon">
+          <i class="far fa-calendar-alt mr-2"><span class="ml-1">5/25</span></i>
+          <i class="far fa-file mr-2"></i>
+          <i class="far fa-comment-dots mr-2"></i>
+        </div>
+        
+        <!-- card-header end -->
+      </div>
+
+    </div>
+
+    <div class="totalUndone">
+        <span><I>4 tasks left</I></span>
+    </div>
+
+  </div>
+
+  
+
+  <script>
+  let app = new Vue({
+    el: '#wrapper',
+    data: {
+      newTodo:'',
+      todos: [
+        {
+          id: '123',
+          title: '待辦事項',
+          date:'',
+          comment:'待辦事項待辦事項待辦事項',
+          completed:false
+        },
+        {
+          id: '456',
+          title: 'Vue Go',
+          date:'',
+          comment:'',
+          completed:false
+        }
+      ],
+      visibility:'all',
+      isActive:false,
+      
+    },
+    methods:{
+      addTodo:function(){
+        let val = this.newTodo.trim();
+        let comment = this.comment;
+        let id = Math.floor(Date.now());
+        if(!val)return;
+        this.todos.push({
+          id: id,
+          title: val,
+          comment:comment,
+          completed: false
+        });
+        this.newTodo = '';
+      },
+      removeTodo:function(key){
+        this.todos.splice(key, 1)
+      },
+      
+
+    },
+    computed:{
+      
+
+
+    }
+
+
+
+
+  })
+
+//卡:星號，add task點擊後滑出
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
