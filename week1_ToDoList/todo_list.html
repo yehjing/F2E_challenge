@@ -365,21 +365,37 @@
           id: '123',
           title: '待辦事項',
           date:'',
-          comment:'待辦事項待辦事項待辦事項',
+          comment:'完成此頁面',
           completed:false,
           star:false
         },
         {
           id: '456',
-          title: 'Vue Go',
+          title: '新增資料功能',
           date:'',
           comment:'',
           completed:false,
+          star:true
+        },
+        {
+          id: '789',
+          title: '完成排序功能',
+          date:'',
+          comment:'',
+          completed:true,
+          star:false
+        },
+        {
+          id: '666',
+          title: '動態效果',
+          date:'',
+          comment:'',
+          completed:true,
           star:false
         }
       ],
       visibility:'all',
-      isActive:false,
+      // isActive:false,
       
     },
     methods:{
@@ -414,15 +430,24 @@
           let orderB = (b.star ? -10000 : 0) + (b.completed ? 10000 :0)
           if (orderA > orderB){
             return 1;
-          }else if (orderA===orderB){
+          }else if (orderA === orderB){
             return 0;
           }else {
             return -1;
-          }
+          };
         })
+        
+        //分類(未完成)
+        /*if(this.visibility === 'all'){
+          return this.todos;
+        }else if (this.visibility === 'progress'){
+          return this.todos.filter(todo => todo.completed === false);
+        }else if (this.visibility === 'completed'){
+          return this.todos.filter(todo => todo.completed === true);
+        }*/
       },
       undo:function(){
-        return this.todos.filter(a => a.completed == false).length;
+        return this.todos.filter(a => a.completed === false).length;
       },
 
 
